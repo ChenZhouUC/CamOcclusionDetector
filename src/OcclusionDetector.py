@@ -3,6 +3,18 @@ import numpy as np
 
 
 def OcclusionDetector(frame, size=(150, 100), super_pixel_set=(3, 2)):
+    """ OcclusionDetector
+    Input:
+        Required:(but you do not necessarily need to use)
+            frame
+            size
+            super_pixel_set
+        Optinal: (please set a default value)
+            ...
+    Output:
+        score within 0 and 1
+    """
+
     # resize
     frame = cv2.resize(frame, size)
     # cv2.imshow("winname", frame)
