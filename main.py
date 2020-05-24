@@ -33,7 +33,7 @@ def loadingConfig(configFileRoot="./data/", configFileName="config.conf"):
     return labeledDict
 
 
-def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(9, 6)):
+def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), saving_output=True):
     labelSeries = []
     probSeries = []
     for label in labeledDict.keys():
@@ -44,7 +44,7 @@ def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(9, 6)):
             probSeries.append(od.OcclusionDetector(
                 frame, size, super_pixel_set))
     # print(labelSeries, probSeries)
-    auc_metrics = em.ROCMetrics(labelSeries, probSeries)
+    auc_metrics = em.ROCMetrics(labelSeries, probSeries, saving=saving_output)
     return auc_metrics
 
 

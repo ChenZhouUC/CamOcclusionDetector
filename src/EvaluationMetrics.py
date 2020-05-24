@@ -4,7 +4,7 @@ from sklearn.metrics import roc_curve, auc
 import numpy as np
 
 
-def ROCMetrics(labelSeries, probSeries, posLabel=1):
+def ROCMetrics(labelSeries, probSeries, posLabel=1, saving=False):
     fpr, tpr, thresholds = roc_curve(
         labelSeries, probSeries, pos_label=posLabel)
     auc_metrics = auc(fpr, tpr)
@@ -16,6 +16,8 @@ def ROCMetrics(labelSeries, probSeries, posLabel=1):
     plt.xlabel("FPR")
     plt.ylabel("TPR")
     plt.title("ROC Curve | AUC="+str(round(auc_metrics, 2)))
+    if saving:
+        plt.savefig('./plots/ROC_Metrics.png')
     plt.show()
 
     return auc_metrics

@@ -25,9 +25,10 @@ def OcclusionDetector(frame, size=(150, 100), super_pixel_set=(3, 2)):
             score = np.mean(thresh[h_num_pixel*h:h_num_pixel *
                                    (h+1), w_num_pixel*w:w_num_pixel*(w+1)])
             score_mat[h, w] = score
-    score = np.std(score_mat) / np.mean(score_mat) / \
-        2 if np.mean(score_mat) > 0 else 1
-    print(score)
+    divider = np.mean(score_mat)
+    score = np.std(score_mat) / divider / \
+        2 if divider > 0 else 1
+    # print(score)
     return min(1, score)
 
 
