@@ -23,6 +23,15 @@ def ROCMetrics(labelSeries, probSeries, posLabel=1, saving=False):
     return auc_metrics
 
 
+def HardCaseMining(caseSeries, scoreSeries, flag, topN=10):
+    if flag == "pos":
+        flag = 1
+    else:
+        flag = -1
+    idx = np.argsort(flag*np.array(scoreSeries))[:topN]
+    return np.array(caseSeries)[idx]
+
+
 if __name__ == "__main__":
 
     labelSeries = np.array([1, 1, 1, 1, 1,
