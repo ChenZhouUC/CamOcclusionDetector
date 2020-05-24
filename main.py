@@ -33,15 +33,16 @@ def loadingConfig(configFileRoot="./data/", configFileName="config.conf"):
     return labeledDict
 
 
-def evaluationProcess(labeledDict, size=(150, 100)):
+def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(9, 6)):
     labelSeries = []
     probSeries = []
     for label in labeledDict.keys():
         print("...processing label: ", label, " ...")
         for data in labeledDict[label]:
             labelSeries.append(label)
-            frame = cv2.imread(data,0)
-            probSeries.append(od.OcclusionDetector(frame, size))
+            frame = cv2.imread(data, 0)
+            probSeries.append(od.OcclusionDetector(
+                frame, size, super_pixel_set))
     # print(labelSeries, probSeries)
     auc_metrics = em.ROCMetrics(labelSeries, probSeries)
     return auc_metrics
