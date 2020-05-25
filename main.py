@@ -34,7 +34,8 @@ def loadingConfig(configFileRoot="./data/", configFileName="config.conf"):
     return labeledDict
 
 
-def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), posLabel=1, saving_output=True):
+def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), posLabel=1,
+                      saving_output=True, hard_case_topN=10):
     labelSeries = []
     probSeries = []
     caseSeries = {}
@@ -58,22 +59,27 @@ def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), po
 
     # print(labelSeries, probSeries)
     pos_hc = em.HardCaseMining(
-        caseSeries["pos"]["case"], caseSeries["pos"]["prob"], "pos")
+        caseSeries["pos"]["case"], caseSeries["pos"]["prob"], "pos", topN=hard_case_topN)
     neg_hc = em.HardCaseMining(
-        caseSeries["neg"]["case"], caseSeries["neg"]["prob"], "neg")
+        caseSeries["neg"]["case"], caseSeries["neg"]["prob"], "neg", topN=hard_case_topN)
     auc_metrics = em.ROCMetrics(
         labelSeries, probSeries, posLabel=posLabel, saving=saving_output)
 
     return auc_metrics, pos_hc, neg_hc
 
 
-def showHardCases(hcList, hcType, showSize=(600, 400)):
-    for hc in hcList:
+def showHardCases(hcResult, hcType, showSize=(600, 400)):
+    hcList, hcScore = hcResult
+    textColor = (0, 255, 0) if hcType == "NEGATIVE" else (0, 0, 255)
+    for idx, hc in enumerate(hcList):
         hc_frame = cv2.imread(hc)
         hc_frame = cv2.resize(hc_frame, showSize)
+        cv2.putText(hc_frame, str(round(hcScore[idx], 2)), (0, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, textColor, 2)
         cv2.imshow(hcType, hc_frame)
         cv2.waitKey(0)
     print(str(len(hcList))+" hard cases for "+hcType+" showed...")
+    cv2.destroyWindow(hcType)
 
 
 if __name__ == "__main__":

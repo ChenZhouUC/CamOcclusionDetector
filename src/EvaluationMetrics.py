@@ -29,7 +29,7 @@ def HardCaseMining(caseSeries, scoreSeries, flag, topN=10):
     else:
         flag = -1
     idx = np.argsort(flag*np.array(scoreSeries))[:topN]
-    return np.array(caseSeries)[idx]
+    return np.array(caseSeries)[idx], np.array(scoreSeries)[idx]
 
 
 if __name__ == "__main__":
