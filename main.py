@@ -35,7 +35,7 @@ def loadingConfig(configFileRoot="./data/", configFileName="config.conf"):
 
 
 def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), posLabel=1,
-                      saving_output=True, hard_case_topN=10):
+                      saving_output=True, hard_case_topN=10, plotSaveName="ROC_Metrics.png"):
     labelSeries = []
     probSeries = []
     caseSeries = {}
@@ -45,9 +45,10 @@ def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), po
         tmp_prob = []
         for data in labeledDict[label]:
             tmp_label.append(label)
-            frame = cv2.imread(data, 0)
+            frame = cv2.imread(data)
             tmp_prob.append(od.OcclusionDetector(
                 frame, size, super_pixel_set))
+            # tmp_prob.append(od.SaturationDetector(frame,size))
         labelSeries.extend(tmp_label)
         probSeries.extend(tmp_prob)
         if label == posLabel:
@@ -63,7 +64,7 @@ def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), po
     neg_hc = em.HardCaseMining(
         caseSeries["neg"]["case"], caseSeries["neg"]["prob"], "neg", topN=hard_case_topN)
     auc_metrics = em.ROCMetrics(
-        labelSeries, probSeries, posLabel=posLabel, saving=saving_output)
+        labelSeries, probSeries, posLabel=posLabel, saving=saving_output, plotSaveName=plotSaveName)
 
     return auc_metrics, pos_hc, neg_hc
 
@@ -85,7 +86,9 @@ def showHardCases(hcResult, hcType, showSize=(600, 400)):
 if __name__ == "__main__":
 
     labeledDict = loadingConfig()
-    auc_metrics, pos_hc, neg_hc = evaluationProcess(labeledDict)
+    auc_metrics, pos_hc, neg_hc = evaluationProcess(labeledDict, hard_case_topN=20,
+                                                    super_pixel_set=(25, 20),
+                                                    plotSaveName="ROC_Metrics.png")
     print("—————————————————————————————————————————")
     print("|    AUC Metrics Achieved: ", round(auc_metrics, 5), "    |")
     print("—————————————————————————————————————————")

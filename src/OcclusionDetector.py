@@ -17,17 +17,23 @@ def OcclusionDetector(frame, size=(150, 100), super_pixel_set=(3, 2)):
 
     # resize
     frame = cv2.resize(frame, size)
-    # cv2.imshow("winname", frame)
-    # cv2.waitKey(0)
-    frame = cv2.GaussianBlur(frame, (5, 5), 0)
+
+    # channel extraction
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    ch1, ch2, ch3 = cv2.split(frame)
+    # ch3 = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    frame = cv2.GaussianBlur(ch3, (5, 5), 0)
+
     # edge detection
     sobelX = cv2.Sobel(frame, cv2.CV_16S, 1, 0, ksize=3)
     sobelY = cv2.Sobel(frame, cv2.CV_16S, 0, 1, ksize=3)
     absX = cv2.convertScaleAbs(sobelX)   # 转回uint8
     absY = cv2.convertScaleAbs(sobelY)
     dst = cv2.addWeighted(absX, 0.5, absY, 0.5, 0)
+
     # thresholding
     ret, thresh = cv2.threshold(dst, 50, 1, cv2.THRESH_BINARY)
+
     # super pixel setting
     w_num_pixel = int(size[0]/super_pixel_set[0])
     h_num_pixel = int(size[1]/super_pixel_set[1])
@@ -44,8 +50,24 @@ def OcclusionDetector(frame, size=(150, 100), super_pixel_set=(3, 2)):
     return min(1, score)
 
 
+def SaturationDetector(frame, size=(150, 100)):
+    # resize
+    frame = cv2.resize(frame, size)
+
+    # channel extraction
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    ch1, ch2, ch3 = cv2.split(frame)
+    frame = cv2.GaussianBlur(ch1, (5, 5), 0)
+    cv2.imshow("winname", frame)
+    cv2.waitKey(0)
+    score = 1-np.mean(frame)/255
+    print(score)
+    return min(1, score)
+
+
 if __name__ == "__main__":
 
-    frame = cv2.imread('../data/Occluded/309.jpg', 0)
-    score = OcclusionDetector(frame)
+    frame = cv2.imread('../data/Exposed/209.jpg')
+    score = SaturationDetector(frame)
+    # score = OcclusionDetector(frame)
     print(score)
