@@ -29,22 +29,7 @@
                 "opencv_imgproc",
                 "-l",
                 "opencv_imgcodecs",
-                "-l",
-                "opencv_shape",
-                "-l",
-                "opencv_videoio",
-                "-l",
-                "opencv_flann",
-                "-l",
-                "opencv_features2d",
-                "-l",
-                "boost_system",
-                "-l",
-                "boost_filesystem",
-                "-fopenmp",
-                "-pthread"
-            ],
-            "showOutput": "always"
+            ]
         }
     ]
 }

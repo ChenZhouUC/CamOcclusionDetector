@@ -38,7 +38,7 @@ double complexityDetector(cv::Mat &src, cv::Size resize_set, cv::Size superpixel
             rowptr[w] = score_tmp[0];
         }
     }
-    std::cout << score_mat << std::endl;
+    // std::cout << score_mat << std::endl;
     cv::Mat means, stddev;
     cv::meanStdDev(score_mat, means, stddev);
 
@@ -54,6 +54,15 @@ int main()
     cv::Mat test_img = cv::imread("/home/chenzhou/Documents/PythonRepo/AuxiliaryRepo/CamOcclusionDetect/data/Occluded/648.jpg");
     cv::Size resize_set = cv::Size{160, 120};
     cv::Size superpixel_set = cv::Size{12, 9};
-    double score = complexityDetector(test_img, resize_set, superpixel_set);
-    std::cout << score << std::endl;
+    clock_t tic = clock();
+    double score;
+    int total_iter = 10000;
+    for (int iter = 0; iter < total_iter; iter++)
+    {
+        score = complexityDetector(test_img, resize_set, superpixel_set);
+    }
+    clock_t toc = clock();
+    std::cout << "function consuming: "
+              << (double)(toc - tic) * 1000.0 / (CLOCKS_PER_SEC * total_iter)
+              << "ms Score: " << score << std::endl;
 }
