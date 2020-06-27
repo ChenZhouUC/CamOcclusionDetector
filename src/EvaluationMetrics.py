@@ -26,12 +26,14 @@ def ROCMetrics(labelSeries, probSeries, posLabel=1, saving=False, plotSaveName="
             break
     line_f = [(x_f, 0), (x_f, y_f)]
     line_t = [(0, y_t), (x_t, y_t)]
+    # print(line_f, line_t)
     (linef_xs, linef_ys) = zip(*line_f)
     (linet_xs, linet_ys) = zip(*line_t)
 
     # depict the ROC metrics
     sns.set()
     ax = sns.lineplot(x=fpr, y=tpr)
+    ax = sns.lineplot(x=fpr, y=thresholds)
     ax.add_line(Line2D(linef_xs, linef_ys, linewidth=2,
                        color='blue', linestyle=':'))
     ax.add_line(Line2D(linet_xs, linet_ys, linewidth=2,
@@ -59,8 +61,8 @@ def HardCaseMining(caseSeries, scoreSeries, flag, topN=10):
 
 if __name__ == "__main__":
 
-    labelSeries = np.array([1, 1, 1, 1, 1,
-                            2, 2, 2, 2, 2])
+    labelSeries = np.array([0, 0, 0, 0, 0,
+                            1, 1, 1, 1, 1])
     probSeries = np.array([0.1, 0.4, 0.4, 0.3, 0.5,
                            0.4, 0.6, 0.7, 0.8, 0.5])   # probability of prediction as positive
 

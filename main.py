@@ -46,9 +46,11 @@ def evaluationProcess(labeledDict, size=(150, 100), super_pixel_set=(15, 10), po
         for data in labeledDict[label]:
             tmp_label.append(label)
             frame = cv2.imread(data)
-            tmp_prob.append(od.OcclusionDetector(
+            # (160, 120), (12, 9)
+            tmp_prob.append(od.ComplexityDetector(
                 frame, size, super_pixel_set))
-            # tmp_prob.append(od.SaturationDetector(frame,size))
+            # tmp_prob.append(od.FragmentDetector(
+            #     frame, size, super_pixel_set))
         labelSeries.extend(tmp_label)
         probSeries.extend(tmp_prob)
         if label == posLabel:
@@ -87,7 +89,8 @@ if __name__ == "__main__":
 
     labeledDict = loadingConfig()
     auc_metrics, pos_hc, neg_hc = evaluationProcess(labeledDict, hard_case_topN=20,
-                                                    super_pixel_set=(25, 20),
+                                                    size=(160, 120),
+                                                    super_pixel_set=(12, 9),
                                                     plotSaveName="ROC_Metrics.png")
     print("—————————————————————————————————————————")
     print("|    AUC Metrics Achieved: ", round(auc_metrics, 5), "    |")
