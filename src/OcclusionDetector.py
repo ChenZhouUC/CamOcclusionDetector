@@ -32,8 +32,11 @@ def ComplexityDetector(frame, size=(160, 120), super_pixel_set=(12, 9)):
     absY = cv2.convertScaleAbs(sobelY)
     dst = cv2.addWeighted(absX, 0.5, absY, 0.5, 0)
 
+    # print(dst)
     # thresholding
     ret, thresh = cv2.threshold(dst, 50, 1, cv2.THRESH_BINARY)
+    # cv2.imshow("thresh",thresh)
+    # cv2.waitKey(-1)
 
     # super pixel setting
     w_num_pixel = size[0]/super_pixel_set[0]

@@ -1,3 +1,4 @@
 data/*/*.jpg
 data/*/*.png
 *__pycache__*
+cpp_api/*.out
